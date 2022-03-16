@@ -5,7 +5,6 @@ namespace Rapidez\Msi\Models\Scopes\Product;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Support\Facades\DB;
-use Rapidez\Msi\Models\Scopes\Product\WithProductStockScopeMsi;
 
 class WithStockQtyScope extends WithProductStockScopeMsi
 {
