@@ -11,7 +11,7 @@ class WithStockQtyScope extends WithProductStockScopeMsi
 {
     public function apply(Builder $builder, Model $model)
     {
-        $stockId = config()->has('rapidez.stock_id') ? config('rapidez.stock_id') : $this->getInventoryStockId();
+        $stockId = config('rapidez.stock_id', $this->getInventoryStockId());
         $query = DB::table('inventory_stock_' . $stockId, 'is')
             ->selectRaw('is.quantity + COALESCE(SUM(ir.quantity),0)')
             ->leftJoin('inventory_reservation AS ir', 'is.sku', '=', 'ir.sku')

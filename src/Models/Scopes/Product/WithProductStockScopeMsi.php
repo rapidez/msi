@@ -12,7 +12,7 @@ class WithProductStockScopeMsi implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        $stockId = config()->has('rapidez.stock_id') ? config('rapidez.stock_id') : $this->getInventoryStockId();
+        $stockId = config('rapidez.stock_id', $this->getInventoryStockId());
         $builder
             ->selectRaw('ANY_VALUE(inventory_stock_' . $stockId . '.is_salable) AS in_stock')
             ->leftJoin('inventory_stock_' . $stockId, $model->getTable() . '.sku', '=', 'inventory_stock_' . $stockId . '.sku');
