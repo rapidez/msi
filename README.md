@@ -13,14 +13,10 @@ The [Message Queues](https://devdocs.magento.com/guides/v2.4/extension-dev-guide
 ##Installation
 ```composer require rapidez/msi```
 
-To expose the `stock_qty` to the product detail and overview page you can add the following configuration to the ```config/rapidez.php``` file:
-```
-'msi'=> [
-    'expose_stock_in_list' => true,
-    'expose_stock_in_detail' => true
-]
+To expose the `stock_qty` to the product detail and overview page you can follow the steps:
+1. Publish the MSI configuration via `php artisan vendor:publish`
+2. Set the values from `false` to `true` where you want to expose the stock information
 
-```
 Don't forget to reindex rapidez with `artisan rapidez:index` for `stock_qty` to be available in the Elasticsearch Indexes.
 
 ## Note

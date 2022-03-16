@@ -18,6 +18,12 @@ class MsiServiceProvider extends ServiceProvider
 
     public function boot()
     {
+        $this->mergeConfigFrom(__DIR__.'/../config/msi.php', 'msi');
+
+        $this->publishes([
+            __DIR__.'/../config/msi.php' => config_path('msi.php'),
+        ], 'config');
+
         $this->addFilters();
     }
 
@@ -25,10 +31,10 @@ class MsiServiceProvider extends ServiceProvider
     {
         Eventy::addFilter('index.product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithProductStockScopeMsi::class]));
         Eventy::addFilter('productpage.scopes', fn($scopes) => array_merge($scopes ?: [], [WithProductStockScopeMsi::class]));
-        if (config('rapidez.msi.expose_stock_in_list')) {
+        if (config('msi.expose_stock_in_list')) {
             Eventy::addFilter('index.product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
         }
-        if (config('rapidez.msi.expose_stock_in_detail')) {
+        if (config('msi.expose_stock_in_detail')) {
             Eventy::addFilter('productpage.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
         }
     }
