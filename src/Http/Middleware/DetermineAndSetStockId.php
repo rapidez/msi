@@ -15,7 +15,7 @@ class DetermineAndSetStockId
      */
     public function handle($request, Closure $next)
     {
-        $stockId = Cache::rememberForever('stock_id', function () {
+        $stockId = Cache::rememberForever('stock_id_website_'.config('rapidez.website'), function () {
             return DB::table('inventory_stock_sales_channel')
                 ->where('inventory_stock_sales_channel.type', 'website')
                 ->where('inventory_stock_sales_channel.code', '=', function ($query) {
