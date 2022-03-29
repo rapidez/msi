@@ -18,24 +18,10 @@ class MsiServiceProvider extends ServiceProvider
 
     public function boot()
     {
-        $this->mergeConfigFrom(__DIR__.'/../config/msi.php', 'msi');
+        Eventy::addFilter('product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithProductStockScopeMsi::class]));
 
-        $this->publishes([
-            __DIR__.'/../config/msi.php' => config_path('msi.php'),
-        ], 'config');
-
-        $this->addFilters();
-    }
-
-    public function addFilters()
-    {
-        Eventy::addFilter('index.product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithProductStockScopeMsi::class]));
-        Eventy::addFilter('productpage.scopes', fn($scopes) => array_merge($scopes ?: [], [WithProductStockScopeMsi::class]));
-        if (config('msi.expose_stock_in_list')) {
-            Eventy::addFilter('index.product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
-        }
-        if (config('msi.expose_stock_in_detail')) {
-            Eventy::addFilter('productpage.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
+        if (config('rapidez.expose_stock')) {
+            Eventy::addFilter('product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
         }
     }
 }

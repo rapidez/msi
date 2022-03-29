@@ -7,43 +7,45 @@ use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Str;
 
 class WithProductStockScopeMsi implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
+        // Remove the existing "in_stock" select.
+        $builder->getQuery()->columns = collect($builder->getQuery()->columns)->filter(function ($column) {
+            return !Str::endsWith((string)$column, 'in_stock');
+        })->toArray();
+
         $stockId = config('rapidez.stock_id', $this->getInventoryStockId());
+
         $builder
             ->selectRaw('ANY_VALUE(inventory_stock_' . $stockId . '.is_salable) AS in_stock')
             ->leftJoin('inventory_stock_' . $stockId, $model->getTable() . '.sku', '=', 'inventory_stock_' . $stockId . '.sku');
     }
 
     /**
-     * Used primaraly as fallback when Global Scopes are used on the Rapidez Indexer as stock_id variable set in HTTP Middleware is not available
+     * Used primarily as fallback when global scopes are used
+     * on the Rapidez indexer as stock_id variable set
+     * in HTTP Middleware is not available.
+     *
      * @return int
      */
     public function getInventoryStockId(): int
     {
         $stockId = Cache::rememberForever('stock_id_website_'.config('rapidez.website'), function () {
             return DB::table('inventory_stock_sales_channel')
+                ->join('store_website', 'store_website.code', '=', 'inventory_stock_sales_channel.code')
+                ->join('store', 'store.website_id', '=', 'store_website.website_id')
                 ->where('inventory_stock_sales_channel.type', 'website')
-                ->where('inventory_stock_sales_channel.code', '=', function ($query) {
-                    $query
-                        ->selectRaw('sw.code')
-                        ->from('store_website as sw')
-                        ->where('sw.website_id', '=', function ($query) {
-                            $query
-                                ->selectRaw('s.website_id')
-                                ->from('store as s')
-                                ->where('s.store_id', config('rapidez.store'));
-                        })
-                        ->limit(1);
-                })
-                ->pluck('stock_id')
-                ->first();
+                ->where('store.store_id', config('rapidez.store'))
+                ->first('stock_id')
+                ->stock_id;
         });
 
         config()->set('rapidez.stock_id', $stockId);
+
         return (int)$stockId;
     }
 }
