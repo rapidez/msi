@@ -34,7 +34,7 @@ class WithProductStockScopeMsi implements Scope
      */
     public function getInventoryStockId(): int
     {
-        $stockId = Cache::rememberForever('stock_id_website_'.config('rapidez.store'), function () {
+        $stockId = Cache::rememberForever('stock_id_store_'.config('rapidez.store'), function () {
             return DB::table('inventory_stock_sales_channel')
                 ->join('store_website', 'store_website.code', '=', 'inventory_stock_sales_channel.code')
                 ->join('store', 'store.website_id', '=', 'store_website.website_id')
