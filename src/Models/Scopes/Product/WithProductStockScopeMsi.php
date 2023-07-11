@@ -18,6 +18,13 @@ class WithProductStockScopeMsi implements Scope
             return !Str::endsWith((string)$column, 'in_stock');
         })->toArray();
 
+        // Remove the "cataloginventory_stock_item AS children_stock" join.
+        foreach ($builder->getQuery()->joins as $key => $join) {
+            if (str_contains($join->table, 'children_stock')) {
+                unset($builder->getQuery()->joins[$key]);
+            }
+        }
+
         $stockId = config('rapidez.stock_id', $this->getInventoryStockId());
 
         $builder

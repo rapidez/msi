@@ -11,13 +11,14 @@ class WithStockQtyScope extends WithProductStockScopeMsi
     public function apply(Builder $builder, Model $model)
     {
         $stockId = config('rapidez.stock_id', $this->getInventoryStockId());
+        $table = 'inventory_stock_' . $stockId;
 
-        $query = DB::table('inventory_stock_' . $stockId, 'is')
-            ->selectRaw('is.quantity + COALESCE(SUM(ir.quantity),0)')
-            ->leftJoin('inventory_reservation AS ir', 'is.sku', '=', 'ir.sku')
-            ->whereColumn('is.sku', $model->getTable() . '.sku')
-            ->groupBy('ir.sku');
+        $query = DB::table($table)
+            ->selectRaw($table.'.quantity + COALESCE(SUM(inventory_reservation.quantity),0)')
+            ->leftJoin('inventory_reservation', $table.'.sku', '=', 'inventory_reservation.sku')
+            ->whereColumn($table.'.sku', $model->getTable() . '.sku')
+            ->groupBy('inventory_reservation.sku');
 
-        $builder->selectSub($query, 'stock_qty');
+        $builder->selectSub($query, 'qty');
     }
 }

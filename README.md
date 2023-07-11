@@ -16,7 +16,7 @@ And run a reindex with `php artisan rapidez:index`
 
 ## Note
 
-Currently this only works with simple products!
+Currently this does not work with grouped products!
 
 ## License
 
