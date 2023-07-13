@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.1...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.2...master)
+## [0.2.2](https://github.com/rapidez/msi/releases/tag/0.2.2) - 2023-07-13
+
+### Fixed
+
+- Inventory stock id config fallback (5a0a179)
+
 ## [0.2.1](https://github.com/rapidez/msi/releases/tag/0.2.1) - 2023-07-13
 
 ### Fixed
