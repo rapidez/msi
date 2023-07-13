@@ -27,7 +27,7 @@ class MsiServiceProvider extends ServiceProvider
             return str_replace('"in_stock", children_stock.is_in_stock,'.PHP_EOL, '', $select).PHP_EOL.',"in_stock", (
                 SELECT is_salable
                 FROM inventory_stock_' . $stockId . '
-                WHERE inventory_stock_' . $stockId . '.sku = '.(new Product())->getTable().'.sku
+                WHERE inventory_stock_' . $stockId . '.sku = children.sku
             )';
         });
 
