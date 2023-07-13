@@ -37,6 +37,9 @@ class WithProductStockScopeMsi implements Scope
      * on the Rapidez indexer as stock_id variable set
      * in HTTP Middleware is not available.
      *
+     * TODO: This should be moved to a better place! Maybe directly
+     * in the core where the current store is determinated?
+     *
      * @return int
      */
     public function getInventoryStockId(): int

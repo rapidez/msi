@@ -22,7 +22,7 @@ class MsiServiceProvider extends ServiceProvider
         Eventy::addFilter('product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithProductStockScopeMsi::class]));
 
         Eventy::addFilter('product.children.select', function ($select) {
-            $stockId = config('rapidez.stock_id');
+            $stockId = config('rapidez.stock_id', (new WithProductStockScopeMsi)->getInventoryStockId());
             // Replace the default "in_stock" with the MSI value.
             return str_replace('"in_stock", children_stock.is_in_stock,'.PHP_EOL, '', $select).PHP_EOL.',"in_stock", (
                 SELECT is_salable
@@ -35,7 +35,7 @@ class MsiServiceProvider extends ServiceProvider
             Eventy::addFilter('product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
 
             Eventy::addFilter('product.children.select', function ($select) {
-                $stockId = config('rapidez.stock_id');
+                $stockId = config('rapidez.stock_id', (new WithProductStockScopeMsi)->getInventoryStockId());
                 // Replace the default "qty" with the MSI value.
                 return str_replace('"qty", children_stock.qty,'.PHP_EOL, '', $select).PHP_EOL.',"qty", (
                     SELECT inventory_stock_' . $stockId . '.quantity + COALESCE(SUM(inventory_reservation.quantity),0)
