@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.2...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.3...master)
+## [0.2.3](https://github.com/rapidez/msi/releases/tag/0.2.3) - 2023-09-05
+
+### Fixed
+
+- Fix errors indexing when table is joined twice or contains more (#4)
+
 ## [0.2.2](https://github.com/rapidez/msi/releases/tag/0.2.2) - 2023-07-13
 
 ### Fixed
