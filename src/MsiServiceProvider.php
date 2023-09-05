@@ -38,7 +38,7 @@ class MsiServiceProvider extends ServiceProvider
                 $stockId = config('rapidez.stock_id', (new WithProductStockScopeMsi)->getInventoryStockId());
                 // Replace the default "qty" with the MSI value.
                 return str_replace('"qty", children_stock.qty,'.PHP_EOL, '', $select).PHP_EOL.',"qty", (
-                    SELECT inventory_stock_' . $stockId . '.quantity + COALESCE(SUM(inventory_reservation.quantity),0)
+                    SELECT ANY_VALUE(inventory_stock_' . $stockId . '.quantity) + COALESCE(SUM(inventory_reservation.quantity),0)
                     FROM inventory_stock_' . $stockId . '
                     LEFT JOIN inventory_reservation ON inventory_stock_' . $stockId . '.sku = inventory_reservation.sku
                     WHERE inventory_stock_' . $stockId . '.sku = children.sku

@@ -14,7 +14,7 @@ class WithStockQtyScope extends WithProductStockScopeMsi
         $table = 'inventory_stock_' . $stockId;
 
         $query = DB::table($table)
-            ->selectRaw($table.'.quantity + COALESCE(SUM(inventory_reservation.quantity),0)')
+            ->selectRaw('ANY_VALUE('.$table.'.quantity) + COALESCE(SUM(inventory_reservation.quantity),0)')
             ->leftJoin('inventory_reservation', $table.'.sku', '=', 'inventory_reservation.sku')
             ->whereColumn($table.'.sku', $model->getTable() . '.sku')
             ->groupBy('inventory_reservation.sku');
