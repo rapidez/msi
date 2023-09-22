@@ -2,6 +2,7 @@
 
 namespace Rapidez\Msi\Models\Scopes\Product;
 
+use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Scope;
@@ -15,6 +16,8 @@ class WithProductStockScopeMsi implements Scope
     {
         // Remove the existing "in_stock" select.
         $builder->getQuery()->columns = collect($builder->getQuery()->columns)->filter(function ($column) {
+            $column = $column instanceof Expression ? $column->getValue($builder->getQuery()->getGrammar()) : $column;
+
             return !Str::endsWith((string)$column, 'in_stock');
         })->toArray();
 
