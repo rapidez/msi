@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.3...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.4...master)
+## [0.2.4](https://github.com/rapidez/msi/releases/tag/0.2.4) - 2023-09-22
+
+### Added
+
+- Laravel 10 support (2dff0eb)
+
 ## [0.2.3](https://github.com/rapidez/msi/releases/tag/0.2.3) - 2023-09-05
 
 ### Fixed
