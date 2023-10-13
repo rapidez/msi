@@ -31,7 +31,7 @@ class MsiServiceProvider extends ServiceProvider
             )';
         });
 
-        if (config('rapidez.expose_stock')) {
+        if (config('rapidez.frontend.expose_stock', config('rapidez.expose_stock'))) {
             Eventy::addFilter('product.scopes', fn($scopes) => array_merge($scopes ?: [], [WithStockQtyScope::class]));
 
             Eventy::addFilter('product.children.select', function ($select) {
