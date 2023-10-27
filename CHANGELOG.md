@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/0.2.5...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/0.3.0...master)
+## [0.3.0](https://github.com/rapidez/msi/releases/tag/0.3.0) - 2023-10-13
+
+### Changed
+
+- Support new config structure (#6)
+
 ## [0.2.5](https://github.com/rapidez/msi/releases/tag/0.2.5) - 2023-09-25
 
 ### Fixed
