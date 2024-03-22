@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/0.3.0...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/1.0.0...master)
+## [1.0.0](https://github.com/rapidez/msi/releases/tag/1.0.0) - 2024-03-22
+
+### Added
+
+- Rapidez v2 support (#7)
+
 ## [0.3.0](https://github.com/rapidez/msi/releases/tag/0.3.0) - 2023-10-13
 
 ### Changed
