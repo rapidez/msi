@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/1.0.0...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/2.0.0...master)
+## [2.0.0](https://github.com/rapidez/msi/releases/tag/2.0.0) - 2024-08-13
+
+### Added
+
+- Laravel 11 support (#8)
+
 ## [1.0.0](https://github.com/rapidez/msi/releases/tag/1.0.0) - 2024-03-22
 
 ### Added
