@@ -1,6 +1,13 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/2.0.0...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/3.0.0...master)
+## [3.0.0](https://github.com/rapidez/msi/releases/tag/3.0.0) - 2025-01-30
+
+### Added
+
+- Added v3 to dependencies (452129f)
+
+
 ## [2.0.0](https://github.com/rapidez/msi/releases/tag/2.0.0) - 2024-08-13
 
 ### Added
