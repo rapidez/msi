@@ -5,7 +5,7 @@
 
 ### Added
 
-- Added v3 to dependencies (452129f)
+- Rapidez v3 support (452129f)
 
 
 ## [2.0.0](https://github.com/rapidez/msi/releases/tag/2.0.0) - 2024-08-13
