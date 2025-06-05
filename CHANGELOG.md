@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/3.1.0...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/4.0.0...master)
+## [4.0.0](https://github.com/rapidez/msi/releases/tag/4.0.0) - 2025-06-05
+
+### Added
+
+- Rapidez v4 support (69a53c5)
+
 ## [3.1.0](https://github.com/rapidez/msi/releases/tag/3.1.0) - 2025-04-10
 
 ### Changed
