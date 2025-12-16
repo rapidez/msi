@@ -6,7 +6,6 @@ use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Scope;
-use Illuminate\Database\Query\JoinClause;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
 
@@ -36,8 +35,7 @@ class WithProductStockScopeMsi implements Scope
             $relation
                 ->from($table)
                 ->select([
-                    "$table.product_id",
-                    "$table.stock_id",
+                    'product_id',
                     "$table.quantity as qty",
                     "$table.is_salable as is_in_stock",
                     'backorders', 'use_config_backorders',
@@ -45,12 +43,9 @@ class WithProductStockScopeMsi implements Scope
                     'max_sale_qty', 'use_config_max_sale_qty',
                     'qty_increments', 'use_config_qty_increments',
                 ])
-                ->join('cataloginventory_stock_item', function(JoinClause $join) use ($table) {
-                    $join->on('cataloginventory_stock_item.product_id', '=', "$table.product_id")
-                        ->whereIn("$table.website_id", [0, config('rapidez.website')]);
-                })
-                ->where("$table.product_id", $productId)
-                ->whereIn("$table.website_id", [0, config('rapidez.website')]);
+                ->leftJoin('catalog_product_entity', 'catalog_product_entity.sku', '=', "$table.sku")
+                ->join('cataloginventory_stock_item', 'cataloginventory_stock_item.product_id', '=', 'catalog_product_entity.entity_id')
+                ->where('catalog_product_entity.entity_id', $productId);
         });
     }
 
