@@ -2,37 +2,51 @@
 
 namespace Rapidez\Msi\Models\Scopes\Product;
 
-use Illuminate\Contracts\Database\Query\Expression;
 use Illuminate\Database\Eloquent\Builder;
 use Illuminate\Database\Eloquent\Model;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
 use Illuminate\Database\Eloquent\Scope;
 use Illuminate\Support\Facades\Cache;
 use Illuminate\Support\Facades\DB;
-use Illuminate\Support\Str;
 
 class WithProductStockScopeMsi implements Scope
 {
     public function apply(Builder $builder, Model $model)
     {
-        // Remove the existing "in_stock" select.
-        $builder->getQuery()->columns = collect($builder->getQuery()->columns)->filter(function ($column) use ($builder) {
-            $column = $column instanceof Expression ? $column->getValue($builder->getQuery()->getGrammar()) : $column;
-
-            return !Str::endsWith((string)$column, 'in_stock');
-        })->toArray();
-
-        // Remove the "cataloginventory_stock_item AS children_stock" join.
-        foreach ($builder->getQuery()->joins as $key => $join) {
-            if (str_contains($join->table, 'children_stock')) {
-                unset($builder->getQuery()->joins[$key]);
-            }
-        }
-
         $stockId = config('rapidez.stock_id', $this->getInventoryStockId());
+        $table = "inventory_stock_$stockId";
 
-        $builder
-            ->selectRaw('ANY_VALUE(inventory_stock_' . $stockId . '.is_salable) AS in_stock')
-            ->leftJoin('inventory_stock_' . $stockId, $model->getTable() . '.sku', '=', 'inventory_stock_' . $stockId . '.sku');
+        /**
+         * Overwrites the already existing eager load with a different query.
+         *
+         * By doing this we keep the `ProductStock` class intact, but we inject some data from the `inventory_stock_` tables.
+         * It's a bit ugly but it gets the job done very cleanly
+         * (as long as you don't, for whatever reason, use `->stock()->get()` instead of `->stock`)
+         */
+        $builder->with('stock', function (BelongsTo $relation) use ($table, $model) {
+            // Get product ID from the `where` binding
+            $productId = $relation->getBaseQuery()->bindings['where'][0];
+
+            // Then remove the bindings...
+            $relation->getBaseQuery()->wheres = [];
+            $relation->getBaseQuery()->bindings['where'] = [];
+
+            // ...and rebuild the query from scratch
+            $relation
+                ->from($table)
+                ->select([
+                    'product_id',
+                    "$table.quantity as qty",
+                    "$table.is_salable as is_in_stock",
+                    'backorders', 'use_config_backorders',
+                    'min_sale_qty', 'use_config_min_sale_qty',
+                    'max_sale_qty', 'use_config_max_sale_qty',
+                    'qty_increments', 'use_config_qty_increments',
+                ])
+                ->leftJoin('catalog_product_entity', 'catalog_product_entity.sku', '=', "$table.sku")
+                ->join('cataloginventory_stock_item', 'cataloginventory_stock_item.product_id', '=', 'catalog_product_entity.entity_id')
+                ->where('catalog_product_entity.entity_id', $productId);
+        });
     }
 
     /**
@@ -41,7 +55,7 @@ class WithProductStockScopeMsi implements Scope
      * in HTTP Middleware is not available.
      *
      * TODO: This should be moved to a better place! Maybe directly
-     * in the core where the current store is determinated?
+     * in the core where the current store is determined?
      *
      * @return int
      */
