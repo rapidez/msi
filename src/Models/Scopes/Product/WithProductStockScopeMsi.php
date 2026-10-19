@@ -25,7 +25,9 @@ class WithProductStockScopeMsi implements Scope
          */
         $builder->with('stock', function (BelongsTo $relation) use ($table, $model) {
             // Get product ID from the `where` binding
-            $productId = $relation->getBaseQuery()->bindings['where'][0];
+            $where = collect($relation->getBaseQuery()->wheres)
+                ->firstWhere('column', $relation->getQualifiedOwnerKeyName());
+            $productId = $where['values'][0] ?? $where['value'] ?? $relation->getBaseQuery()->bindings['where'][0] ?? null;
 
             // Then remove the bindings...
             $relation->getBaseQuery()->wheres = [];
