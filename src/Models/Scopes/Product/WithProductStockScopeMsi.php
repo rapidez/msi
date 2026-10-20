@@ -25,7 +25,16 @@ class WithProductStockScopeMsi implements Scope
          */
         $builder->with('stock', function (BelongsTo $relation) use ($table, $model) {
             // Get product ID from the `where` binding
-            $productId = $relation->getBaseQuery()->bindings['where'][0];
+            $where = collect($relation->getBaseQuery()->wheres)
+                ->firstWhere('column', $relation->getQualifiedOwnerKeyName());
+            $productIds = $where['values'] ?? null;
+            if (!$productIds && isset($where['value'])) {
+                $productIds = [$where['value']];
+            }
+        
+            if (!$productIds) {
+                $productIds = array_filter([$relation->getBaseQuery()->bindings['where'][0] ?? null], fn ($value) => $value !== null)
+            }
 
             // Then remove the bindings...
             $relation->getBaseQuery()->wheres = [];
@@ -45,7 +54,7 @@ class WithProductStockScopeMsi implements Scope
                 ])
                 ->leftJoin('catalog_product_entity', 'catalog_product_entity.sku', '=', "$table.sku")
                 ->join('cataloginventory_stock_item', 'cataloginventory_stock_item.product_id', '=', 'catalog_product_entity.entity_id')
-                ->where('catalog_product_entity.entity_id', $productId);
+                ->whereIn('catalog_product_entity.entity_id', $productIds);
         });
     }
 
