@@ -1,6 +1,12 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/5.0.0...master)
+[Unreleased changes](https://github.com/rapidez/msi/compare/5.0.1...5.0.1)
+## [5.0.1](https://github.com/rapidez/msi/releases/tag/5.0.1) - 2026-10-27
+
+### Fixed
+
+- Fixed ['where'][0] is undefined (#10)
+
 ## [5.0.0](https://github.com/rapidez/msi/releases/tag/5.0.0) - 2026-01-06
 
 ### Added
