@@ -33,7 +33,7 @@ class WithProductStockScopeMsi implements Scope
             }
         
             if (!$productIds) {
-                $productIds = array_filter([$relation->getBaseQuery()->bindings['where'][0] ?? null], fn ($value) => $value !== null)
+                $productIds = array_filter([$relation->getBaseQuery()->bindings['where'][0] ?? null], fn ($value) => $value !== null);
             }
 
             // Then remove the bindings...
