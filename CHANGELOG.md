@@ -1,6 +1,14 @@
 # Changelog 
 
-[Unreleased changes](https://github.com/rapidez/msi/compare/5.0.1...5.0.1)
+[Unreleased changes](https://github.com/rapidez/msi/compare/5.0.2...5.0.2)
+## [5.0.2](https://github.com/rapidez/msi/releases/tag/5.0.2) - 2026-10-29
+
+### Fixed
+
+- Fixed missing semicolon (#11)
+
+
+
 ## [5.0.1](https://github.com/rapidez/msi/releases/tag/5.0.1) - 2026-10-27
 
 ### Fixed
